@@ -83,7 +83,7 @@ function getUserLocation() {
 }
 
 function fetchLocationName(numLatitude, numLongitude) {
-    const strReverseUrl = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${numLatitude}&longitude=${numLongitude}&language=en&format=json`
+    const strReverseUrl = `https://nominatim.openstreetmap.org/reverse?lat=${numLatitude}&lon=${numLongitude}&format=jsonv2`
 
     return fetch(strReverseUrl)
         .then(objResponse => {
@@ -93,13 +93,13 @@ function fetchLocationName(numLatitude, numLongitude) {
             return objResponse.json()
         })
         .then(objLocationData => {
-            if (!objLocationData.results || objLocationData.results.length === 0) {
+            if (!objLocationData.address) {
                 throw new Error('No location results returned.')
             }
 
-            const objPlace = objLocationData.results[0]
-            const strCity = objPlace.name || objPlace.city || 'Current Location'
-            const strState = objPlace.admin1 ? `, ${objPlace.admin1}` : ''
+            const objAddress = objLocationData.address
+            const strCity = objAddress.city || objAddress.town || objAddress.village || objAddress.hamlet || 'Current Location'
+            const strState = objAddress.state ? `, ${objAddress.state}` : ''
             return `${strCity}${strState}`
         })
 }
