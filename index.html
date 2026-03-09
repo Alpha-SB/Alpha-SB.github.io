@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#0d6efd">
+    <title>Weather App</title>
+    <link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/icons/cloud-sun-fill.svg">
+    <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/icons/cloud-sun-fill.svg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="weather-body">
+    <main class="container py-4 py-lg-5">
+        <section class="row justify-content-center">
+            <div class="col-12 col-xl-10">
+                <div class="card shadow-lg border-0 weather-card overflow-hidden">
+                    <div class="card-body p-4 p-md-5">
+                        <header class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                            <div>
+                                <p class="eyebrow mb-1">SAWYER'S FORECAST STUDIO</p>
+                                <h1 class="mb-1" id="h1Location">Loading weather...</h1>
+                                <p class="mb-0 text-secondary" id="pHeaderSummary">--&deg; | --</p>
+                                <p class="mb-0 text-secondary" id="pUpdated">Updated --:--</p>
+                            </div>
+                            <button class="btn btn-primary px-3" id="btnRefresh" type="button" aria-label="Refresh weather">
+                                Refresh Data
+                            </button>
+                        </header>
+
+                        <div class="row mt-4 g-3 align-items-stretch">
+                            <div class="col-12 col-lg-8">
+                                <article class="metric-panel hero-panel h-100">
+                                    <p class="text-uppercase small mb-1 text-secondary">Right Now</p>
+                                    <p class="hero-temp mb-0" id="h2Temperature">--&deg;F</p>
+                                    <p class="mb-1 text-secondary" id="pFeelsLike">Feels like --&deg;F</p>
+                                    <p class="mb-0 text-secondary" id="pWind">Wind -- mph</p>
+                                </article>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <article class="metric-panel h-100 text-center d-flex flex-column justify-content-center">
+                                    <p class="text-uppercase small mb-2 text-secondary">Outside</p>
+                                    <img class="weather-icon mx-auto" id="imgConditionIcon" src="icons/cloud-fill.svg" alt="Current weather icon">
+                                    <p class="mb-0 mt-2 h5" id="pConditionText">Unknown</p>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3 g-3">
+                            <div class="col-12 col-md-4">
+                                <article class="metric-panel h-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img class="mini-icon" src="icons/moisture.svg" alt="Humidity icon">
+                                        <p class="text-uppercase small mb-0 text-secondary">Humidity</p>
+                                    </div>
+                                    <p class="h3 mb-0 mt-2" id="h3Humidity">--%</p>
+                                </article>
+                            </div>
+                            <div class="col-12 col-md-8">
+                                <article class="metric-panel h-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img class="mini-icon" src="icons/umbrella.svg" alt="Rain icon">
+                                        <p class="text-uppercase small mb-0 text-secondary">Chance of Rain</p>
+                                    </div>
+                                    <div class="progress" role="progressbar" aria-label="Rain chance percentage" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar mt-2" id="divRainChanceBar" style="width: 0%">0%</div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3 g-3">
+                            <div class="col-6 col-md-4">
+                                <article class="metric-panel h-100">
+                                    <p class="text-uppercase small mb-1 text-secondary">High Today</p>
+                                    <p class="h4 mb-0" id="pHighToday">--&deg;F</p>
+                                </article>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <article class="metric-panel h-100">
+                                    <p class="text-uppercase small mb-1 text-secondary">Low Today</p>
+                                    <p class="h4 mb-0" id="pLowToday">--&deg;F</p>
+                                </article>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <article class="metric-panel h-100">
+                                    <p class="text-uppercase small mb-1 text-secondary">Sunset</p>
+                                    <p class="h4 mb-0" id="pSunset">--:--</p>
+                                </article>
+                            </div>
+                        </div>
+
+                        <p class="text-danger mt-3 mb-0 d-none" id="pError"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center pb-4 px-3">
+        Weather data by
+        <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>
+        (<a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener">API Docs</a>)
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,2 +1,2 @@
-# ALpha-SB.github.io
+# Alpha-SB.github.io
 Weather Application for basic weather data 
