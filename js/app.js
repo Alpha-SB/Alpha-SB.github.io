@@ -57,16 +57,51 @@ function getUserLocation() {
         // It tries GPS location first then fallsback to default on timeout/denied permission
         navigator.geolocation.getCurrentPosition(
             objPosition => {
-                resolve({
-                    strName: 'Your Current Location',
-                    numLatitude: objPosition.coords.latitude,
-                    numLongitude: objPosition.coords.longitude
-                })
+                const numLatitude = objPosition.coords.latitude
+                const numLongitude = objPosition.coords.longitude
+
+                fetchLocationName(numLatitude, numLongitude)
+                    .then(strLocationName => {
+                        resolve({
+                            strName: strLocationName,
+                            numLatitude: numLatitude,
+                            numLongitude: numLongitude
+                        })
+                    })
+                    .catch(() => {
+                        resolve({
+                            strName: 'Your Current Location',
+                            numLatitude: numLatitude,
+                            numLongitude: numLongitude
+                        })
+                    })
             },
             () => resolve(objDefaultLocation),
             { enableHighAccuracy: true, timeout: 7000 }
         )
     })
+}
+
+function fetchLocationName(numLatitude, numLongitude) {
+    const strReverseUrl = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${numLatitude}&longitude=${numLongitude}&language=en&format=json`
+
+    return fetch(strReverseUrl)
+        .then(objResponse => {
+            if (!objResponse.ok) {
+                throw new Error('Unable to lookup location name.')
+            }
+            return objResponse.json()
+        })
+        .then(objLocationData => {
+            if (!objLocationData.results || objLocationData.results.length === 0) {
+                throw new Error('No location results returned.')
+            }
+
+            const objPlace = objLocationData.results[0]
+            const strCity = objPlace.name || objPlace.city || 'Current Location'
+            const strState = objPlace.admin1 ? `, ${objPlace.admin1}` : ''
+            return `${strCity}${strState}`
+        })
 }
 
 function fetchWeatherData(objLocation) {
@@ -98,7 +133,6 @@ function renderWeather(objApiData) {
     }
 
     document.querySelector('#txtLocation').textContent = `${objApiData.objLocation.strName} Weather`
-    document.querySelector('#txtHeaderSummary').innerHTML = `${numTemperature}&deg; | ${objCondition.strText}`
     document.querySelector('#txtUpdated').textContent = `Updated ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
     document.querySelector('#txtTemperature').innerHTML = `${numTemperature}&deg;F`
     document.querySelector('#txtFeelsLike').innerHTML = `Feels like ${Math.round(objCurrent.apparent_temperature)}&deg;F`
