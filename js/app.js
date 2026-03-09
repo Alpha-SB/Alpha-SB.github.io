@@ -158,4 +158,4 @@ function renderWeather(objApiData) {
 }
 
 // AI usage disclosure 
-// OpenAI Codex (GPT-5) was used to help implement the weathercodemap and comment this assignment code
+// OpenAI Codex (GPT-5) was used to help implement the weathercodemap and figure out how to style the rain chance bar. It was also used to help debug some issues with geolocation and API fetching.
