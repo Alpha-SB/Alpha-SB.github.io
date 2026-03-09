@@ -12,20 +12,19 @@
     <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/icons/cloud-sun-fill.svg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="css/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="weather-body">
+<body class="bg-light min-vh-100">
     <main class="container py-4 py-lg-5">
         <section class="row justify-content-center">
             <div class="col-12 col-xl-10">
-                <div class="card shadow-lg border-0 weather-card overflow-hidden">
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden bg-white">
                     <div class="card-body p-4 p-md-5">
                         <header class="d-flex flex-wrap justify-content-between align-items-start gap-3">
                             <div>
-                                <p class="eyebrow mb-1">SAWYER'S FORECAST STUDIO</p>
-                                <h1 class="mb-1" id="h1Location">Loading weather...</h1>
-                                <p class="mb-0 text-secondary" id="pHeaderSummary">--&deg; | --</p>
-                                <p class="mb-0 text-secondary" id="pUpdated">Updated --:--</p>
+                                <p class="text-primary text-uppercase fw-bold small mb-1">SAWYER'S FORECAST STUDIO</p>
+                                <h1 class="mb-1" id="txtLocation">Loading weather...</h1>
+                                <p class="mb-0 text-secondary" id="txtHeaderSummary">--&deg; | --</p>
+                                <p class="mb-0 text-secondary" id="txtUpdated">Updated --:--</p>
                             </div>
                             <button class="btn btn-primary px-3" id="btnRefresh" type="button" aria-label="Refresh weather">
                                 Refresh Data
@@ -34,67 +33,81 @@
 
                         <div class="row mt-4 g-3 align-items-stretch">
                             <div class="col-12 col-lg-8">
-                                <article class="metric-panel hero-panel h-100">
-                                    <p class="text-uppercase small mb-1 text-secondary">Right Now</p>
-                                    <p class="hero-temp mb-0" id="h2Temperature">--&deg;F</p>
-                                    <p class="mb-1 text-secondary" id="pFeelsLike">Feels like --&deg;F</p>
-                                    <p class="mb-0 text-secondary" id="pWind">Wind -- mph</p>
-                                </article>
+                                <div class="card h-100 rounded-4">
+                                    <div class="card-body py-4">
+                                        <p class="text-uppercase small mb-1 text-secondary">Right Now</p>
+                                        <p class="display-2 lh-1 mb-0 fw-bold" id="txtTemperature">--&deg;F</p>
+                                        <p class="mb-1 text-secondary" id="txtFeelsLike">Feels like --&deg;F</p>
+                                        <p class="mb-0 text-secondary" id="txtWind">Wind -- mph</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12 col-lg-4">
-                                <article class="metric-panel h-100 text-center d-flex flex-column justify-content-center">
-                                    <p class="text-uppercase small mb-2 text-secondary">Outside</p>
-                                    <img class="weather-icon mx-auto" id="imgConditionIcon" src="icons/cloud-fill.svg" alt="Current weather icon">
-                                    <p class="mb-0 mt-2 h5" id="pConditionText">Unknown</p>
-                                </article>
+                                <div class="card h-100 text-center d-flex flex-column justify-content-center rounded-4">
+                                    <div class="card-body">
+                                        <p class="text-uppercase small mb-2 text-secondary">Outside</p>
+                                        <img class="mx-auto" width="82" height="82" id="imgConditionIcon" src="icons/cloud-fill.svg" alt="Current weather icon">
+                                        <p class="mb-0 mt-2 h5" id="txtConditionText">Unknown</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row mt-3 g-3">
                             <div class="col-12 col-md-4">
-                                <article class="metric-panel h-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img class="mini-icon" src="icons/moisture.svg" alt="Humidity icon">
-                                        <p class="text-uppercase small mb-0 text-secondary">Humidity</p>
+                                <div class="card h-100 rounded-4">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img width="24" height="24" src="icons/moisture.svg" alt="Humidity icon">
+                                            <p class="text-uppercase small mb-0 text-secondary">Humidity</p>
+                                        </div>
+                                        <p class="h3 mb-0 mt-2" id="txtHumidity">--%</p>
                                     </div>
-                                    <p class="h3 mb-0 mt-2" id="h3Humidity">--%</p>
-                                </article>
+                                </div>
                             </div>
                             <div class="col-12 col-md-8">
-                                <article class="metric-panel h-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img class="mini-icon" src="icons/umbrella.svg" alt="Rain icon">
-                                        <p class="text-uppercase small mb-0 text-secondary">Chance of Rain</p>
+                                <div class="card h-100 rounded-4">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img width="24" height="24" src="icons/umbrella.svg" alt="Rain icon">
+                                            <p class="text-uppercase small mb-0 text-secondary">Chance of Rain</p>
+                                        </div>
+                                        <div class="progress mt-2" role="progressbar" aria-label="Rain chance percentage" aria-valuemin="0" aria-valuemax="100">
+                                            <div class="progress-bar" id="divRainChanceBar" style="width: 0%">0%</div>
+                                        </div>
                                     </div>
-                                    <div class="progress" role="progressbar" aria-label="Rain chance percentage" aria-valuemin="0" aria-valuemax="100">
-                                        <div class="progress-bar mt-2" id="divRainChanceBar" style="width: 0%">0%</div>
-                                    </div>
-                                </article>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row mt-3 g-3">
                             <div class="col-6 col-md-4">
-                                <article class="metric-panel h-100">
-                                    <p class="text-uppercase small mb-1 text-secondary">High Today</p>
-                                    <p class="h4 mb-0" id="pHighToday">--&deg;F</p>
-                                </article>
+                                <div class="card h-100 rounded-4">
+                                    <div class="card-body">
+                                        <p class="text-uppercase small mb-1 text-secondary">High Today</p>
+                                        <p class="h4 mb-0" id="txtHighToday">--&deg;F</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-6 col-md-4">
-                                <article class="metric-panel h-100">
-                                    <p class="text-uppercase small mb-1 text-secondary">Low Today</p>
-                                    <p class="h4 mb-0" id="pLowToday">--&deg;F</p>
-                                </article>
+                                <div class="card h-100 rounded-4">
+                                    <div class="card-body">
+                                        <p class="text-uppercase small mb-1 text-secondary">Low Today</p>
+                                        <p class="h4 mb-0" id="txtLowToday">--&deg;F</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12 col-md-4">
-                                <article class="metric-panel h-100">
-                                    <p class="text-uppercase small mb-1 text-secondary">Sunset</p>
-                                    <p class="h4 mb-0" id="pSunset">--:--</p>
-                                </article>
+                                <div class="card h-100 rounded-4">
+                                    <div class="card-body">
+                                        <p class="text-uppercase small mb-1 text-secondary">Sunset</p>
+                                        <p class="h4 mb-0" id="txtSunset">--:--</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <p class="text-danger mt-3 mb-0 d-none" id="pError"></p>
+                        <p class="text-danger mt-3 mb-0 d-none" id="txtError"></p>
                     </div>
                 </div>
             </div>

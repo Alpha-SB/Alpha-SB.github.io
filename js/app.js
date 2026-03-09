@@ -1,9 +1,11 @@
+//declares a default location of cookeville incase GPS fails
 const objDefaultLocation = {
     strName: 'Cookeville, TN',
     numLatitude: 36.1628,
     numLongitude: -85.5016
 }
 
+// Maps Open-Meteo weather codes to user-friendly text and icons
 const objWeatherCodeMap = {
     0: { strText: 'Clear Sky', strIconPath: 'icons/sun-fill.svg' },
     1: { strText: 'Mainly Clear', strIconPath: 'icons/sun-fill.svg' },
@@ -33,26 +35,26 @@ document.querySelector('#btnRefresh').addEventListener('click', loadWeather)
 loadWeather()
 
 function loadWeather() {
-    // Hide old errors before each new API request sequence.
-    document.querySelector('#pError').classList.add('d-none')
+    // Hides old errors before each new API request
+    document.querySelector('#txtError').classList.add('d-none')
     getUserLocation()
         .then(objLocation => fetchWeatherData(objLocation))
         .then(objData => renderWeather(objData))
         .catch(objError => {
-            document.querySelector('#pError').classList.remove('d-none')
-            document.querySelector('#pError').textContent = objError.message
+            document.querySelector('#txtError').classList.remove('d-none')
+            document.querySelector('#txtError').textContent = objError.message
         })
 }
 
 function getUserLocation() {
     return new Promise(resolve => {
-        // If geolocation is unavailable, use a known default location.
+        // If geolocation fails it will default to cookeville
         if (!navigator.geolocation) {
             resolve(objDefaultLocation)
             return
         }
 
-        // Try GPS location first; fallback to default on timeout/denied permission.
+        // It tries GPS location first then fallsback to default on timeout/denied permission
         navigator.geolocation.getCurrentPosition(
             objPosition => {
                 resolve({
@@ -68,7 +70,7 @@ function getUserLocation() {
 }
 
 function fetchWeatherData(objLocation) {
-    // Build one API call to get current conditions and today's summary.
+    // Build one API call to get current conditions and today's summary
     const strApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${objLocation.numLatitude}&longitude=${objLocation.numLongitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto`
 
     return fetch(strApiUrl)
@@ -79,7 +81,6 @@ function fetchWeatherData(objLocation) {
             return objResponse.json()
         })
         .then(objApiData => {
-            // Keep location metadata with the weather payload for rendering.
             objApiData.objLocation = objLocation
             return objApiData
         })
@@ -96,41 +97,31 @@ function renderWeather(objApiData) {
         strIconPath: 'icons/cloud-fill.svg'
     }
 
-    document.querySelector('#h1Location').textContent = `${objApiData.objLocation.strName} Weather`
-    document.querySelector('#pHeaderSummary').innerHTML = `${numTemperature}&deg; | ${objCondition.strText}`
-    document.querySelector('#pUpdated').textContent = `Updated ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
-    document.querySelector('#h2Temperature').innerHTML = `${numTemperature}&deg;F`
-    document.querySelector('#pFeelsLike').innerHTML = `Feels like ${Math.round(objCurrent.apparent_temperature)}&deg;F`
-    document.querySelector('#pWind').textContent = `Wind ${Math.round(objCurrent.wind_speed_10m)} mph`
-    document.querySelector('#h3Humidity').textContent = `${objCurrent.relative_humidity_2m}%`
-    document.querySelector('#pConditionText').textContent = objCondition.strText
+    document.querySelector('#txtLocation').textContent = `${objApiData.objLocation.strName} Weather`
+    document.querySelector('#txtHeaderSummary').innerHTML = `${numTemperature}&deg; | ${objCondition.strText}`
+    document.querySelector('#txtUpdated').textContent = `Updated ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
+    document.querySelector('#txtTemperature').innerHTML = `${numTemperature}&deg;F`
+    document.querySelector('#txtFeelsLike').innerHTML = `Feels like ${Math.round(objCurrent.apparent_temperature)}&deg;F`
+    document.querySelector('#txtWind').textContent = `Wind ${Math.round(objCurrent.wind_speed_10m)} mph`
+    document.querySelector('#txtHumidity').textContent = `${objCurrent.relative_humidity_2m}%`
+    document.querySelector('#txtConditionText').textContent = objCondition.strText
     document.querySelector('#imgConditionIcon').src = objCondition.strIconPath
     document.querySelector('#imgConditionIcon').alt = objCondition.strText
 
-    document.querySelector('#pHighToday').innerHTML = `${Math.round(objDaily.temperature_2m_max[0])}&deg;F`
-    document.querySelector('#pLowToday').innerHTML = `${Math.round(objDaily.temperature_2m_min[0])}&deg;F`
+    document.querySelector('#txtHighToday').innerHTML = `${Math.round(objDaily.temperature_2m_max[0])}&deg;F`
+    document.querySelector('#txtLowToday').innerHTML = `${Math.round(objDaily.temperature_2m_min[0])}&deg;F`
 
     const objSunsetDate = new Date(objDaily.sunset[0])
-    document.querySelector('#pSunset').textContent = objSunsetDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+    document.querySelector('#txtSunset').textContent = objSunsetDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
 
-    // Use the daily max rain probability for a simple visual indicator.
+    // Use the daily max rain probability for a simple visual indicator
     const numRainChance = objDaily.precipitation_probability_max[0] || 0
     const objRainBar = document.querySelector('#divRainChanceBar')
     objRainBar.style.width = `${numRainChance}%`
     objRainBar.textContent = `${numRainChance}%`
     objRainBar.setAttribute('aria-valuenow', numRainChance.toString())
 
-    applyWeatherTheme(numCode)
 }
 
-function applyWeatherTheme(numCode) {
-    document.body.classList.remove('theme-rain')
-
-    const arrRainCodes = [51, 53, 55, 61, 63, 65, 80, 81, 82, 95, 96, 99]
-    if (arrRainCodes.includes(numCode)) {
-        document.body.classList.add('theme-rain')
-    }
-}
-
-// AI usage disclosure required by assignment:
-// OpenAI Codex (GPT-5) was used to help implement and comment this assignment code.
+// AI usage disclosure 
+// OpenAI Codex (GPT-5) was used to help implement the weathercodemap and comment this assignment code
