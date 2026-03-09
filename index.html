@@ -128,7 +128,7 @@
             numLongitude: -85.5016
         }
 
-        // Maps Open-Meteo weather codes to user-friendly text and icons
+        // Maps Open-Meteo weather codes to user friendly text and icons
         const objWeatherCodeMap = {
             0: { strText: 'Clear Sky', strIconPath: 'icons/sun-fill.svg' },
             1: { strText: 'Mainly Clear', strIconPath: 'icons/sun-fill.svg' },
@@ -171,13 +171,13 @@
 
         function getUserLocation() {
             return new Promise(resolve => {
-                // If geolocation fails it will default to cookeville
+                // If geolocation fails it will default to cookeville currently
                 if (!navigator.geolocation) {
                     resolve(objDefaultLocation)
                     return
                 }
 
-                // It tries GPS location first then fallsback to default on timeout/denied permission
+                // It tries GPS location first then fallsback to default if it does not work
                 navigator.geolocation.getCurrentPosition(
                     objPosition => {
                         const numLatitude = objPosition.coords.latitude
@@ -280,7 +280,7 @@
         }
 
         // AI usage disclosure
-        // OpenAI Codex (GPT-5) was used to help implement the weathercodemap and figure out how to style the rain chance bar. It was also used to help debug some issues with geolocation and API fetching.
+        // OpenAI Codex (GPT-5) was used to help implement the weathercodemap and figure out how to style the rain chance bar. It was also used to help debug some issues with geolocation and API fetching. As well as inline styling help for better looks. 
     </script>
 </body>
 </html>
